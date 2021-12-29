@@ -1,40 +1,23 @@
 <?php
 /**
- * @version        $Id: index.php 1 9:23 2010-11-11 tianya $
- * @package        DedeCMS.Site
- * @copyright      Copyright (c) 2007 - 2010, DesDev, Inc.
- * @license        http://help.dedecms.com/usersguide/license.html
- * @link           http://www.dedecms.com
+ * @copyright (C)2016-2099 Hnaoyun Inc.
+ * @author XingMeng
+ * @email hnxsh@foxmail.com
+ * @date 2016年11月5日
+ *  用户前端入口文件
  */
-if(!file_exists(dirname(__FILE__).'/data/common.inc.php'))
-{
-    header('Location:install/index.php');
-    exit();
+
+// 定义为入口文件
+define('IS_INDEX', true);
+
+// 入口文件地址绑定
+define('URL_BIND', 'home');
+
+// PHP版本检测
+if (PHP_VERSION < '5.4') {
+    header('Content-Type:text/html; charset=utf-8');
+    exit('您服务器PHP的版本太低，程序要求PHP版本不小于5.4');
 }
-//自动生成HTML版
-if(isset($_GET['upcache']) || !file_exists('index.html'))
-{
-    require_once (dirname(__FILE__) . "/include/common.inc.php");
-    require_once DEDEINC."/arc.partview.class.php";
-    $GLOBALS['_arclistEnv'] = 'index';
-    $row = $dsql->GetOne("Select * From `#@__homepageset`");
-    $row['templet'] = MfTemplet($row['templet']);
-    $pv = new PartView();
-    $pv->SetTemplet($cfg_basedir . $cfg_templets_dir . "/" . $row['templet']);
-    $row['showmod'] = isset($row['showmod'])? $row['showmod'] : 0;
-    if ($row['showmod'] == 1)
-    {
-        $pv->SaveToHtml(dirname(__FILE__).'/index.html');
-        include(dirname(__FILE__).'/index.html');
-        exit();
-    } else { 
-        $pv->Display();
-        exit();
-    }
-}
-else
-{
-    header('HTTP/1.1 301 Moved Permanently');
-    header('Location:index.html');
-}
-?>
+
+// 引用内核启动文件
+require dirname(__FILE__) . '/core/start.php';
